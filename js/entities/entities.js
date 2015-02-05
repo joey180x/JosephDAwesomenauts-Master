@@ -18,7 +18,7 @@
 				getShape: function(){
 					return(new me.Rect(0, 0, 64, 64)).toPolygon();
 					//rectangle of what character can walk in to
-				}
+				} 
 			}]);
 				
 
