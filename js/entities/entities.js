@@ -25,6 +25,10 @@
 			this.body.setVelocity(5, 20);
 			//movement speed
 			//changing the x and y location
+			this.facing = "right";
+			this.now = new Date().getTime();
+			this.lastHit = this.now;
+			this.lastAttack = new Date().getTime(); //Haven't used this
 			me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 			//follows the player on the x axis on the screen
 
@@ -39,6 +43,7 @@
 		},
 
 		update: function(delta) {
+			this.now = new Date().getTime();
 			if(me.input.isKeyPressed("right")){
 				//sets the position of my x by adding the velocity defined above in
 				// setVelocity() and multiplying it by me.timer.tick.
@@ -70,36 +75,36 @@
 				this.body.vel.y -= this.body.accel.y * me.timer.tick;
 			}
 
-			
-//
-		if(me.input.isKeyPressed("attack")){
-			//if attack key "a" is pressed...
-				
+		
+			if(me.input.isKeyPressed("attack")){
 				if(!this.renderable.isCurrentAnimation("attack")){
-					//Sets the current animation to attack and once that is over
-					//goes back to the idle animation
-					this.renderable.setCurrentAnimation("attack", "idle");
-					//Mkaes it so that the the next time we start this sequence 
-					//we start from the first animation, not wherever we left off at
-					//when we switched to another animation
-					this.renderable.setAnimationFrame();
-				}
-			}		
-			else if(this.body.vel.x !== 0) {
-			//only going to walk animation if guy is moving
+					console.log(!this.renderable.isCurrentAnimation("attack"));
+				//Sets the current animation to attack and once that
+				//is overe go back to the idle animation
+				this.renderable.setCurrentAnimation("attack", "idle");
+				//Makes it so that the next time we start this sequence we
+				//begin from the first animation, not wherever we left off
+				this.renderable.setAnimationFrame();
 
-			if (!this.renderable.isCurrentAnimation("walk")) {
-				//if this is not walking
+			}
+
+		}
+		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")){
+			if(!this.renderable.isCurrentAnimation("walk")){
+				//if it is not showing the walk animation
 				this.renderable.setCurrentAnimation("walk");
-				//walking
+				//show walk animation
 			}
 		}
-		else{
+		else if(!this.renderable.isCurrentAnimation("attack")){
+			//if not showing attack animation
 			this.renderable.setCurrentAnimation("idle");
-			//setting animation to idle if not walking
+			//show idle animation
 		}
+
+
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
-			this.body.update(delta);
+		this.body.update(delta);
 
 			this._super(me.Entity, "update", [delta]);
 			//updating the super function "delta"
@@ -136,6 +141,17 @@
 					this.body.vel.x = 0;
 					//when your not moving
 					this.pos.x = this.pos.x +1;
+				}
+
+
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000){
+					console.log("tower Hit");
+					//if attacking
+					//checking if it has been 400 ms since base was hit
+					//going to update last hit variable so that this will work repeatedly
+					this.lastHit = this.now;
+					response.b.loseHealth();
+					//responce is for b to lose health
 				}
 			}
 		}
@@ -243,6 +259,10 @@
 
 			onCollision: function(){
 
+			},
+
+			loseHealth: function(){
+				this.health--;	
 			}
 
 		});
