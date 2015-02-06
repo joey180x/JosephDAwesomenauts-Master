@@ -47,9 +47,11 @@
 
 				this.flipX(true);
 				//flips animation
-				this.facing = "right"
+				this.facing = "right";
 			}
-			else if{me.input.isKeyPressed("left")){
+			else if(me.input.isKeyPressed("left")){
+				this.facing = "left";
+				//facing left when
 				this.body.vel.x -=this.body.accel.x = me.timer.tick;
 				//making player accelerate to the left
 				this.flipX(false);
@@ -59,6 +61,13 @@
 
 				this.body.vel.x = 0;
 				//checking if velocity is 0
+			}
+
+			if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling){
+				//if not jumping or falling. jump ^
+				//this is on Y axis so dont want this in the if else
+				this.jumping = true;
+				this.body.vel.y -= this.body.accel.y * me.timer.tick;
 			}
 
 			
@@ -89,19 +98,46 @@
 			this.renderable.setCurrentAnimation("idle");
 			//setting animation to idle if not walking
 		}
-
-
-		
-
-
-
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
 			this.body.update(delta);
-			//updating delta
 
 			this._super(me.Entity, "update", [delta]);
 			//updating the super function "delta"
 			return true;
 			//returning true
+		},
+
+		collideHandler: function(response) {
+			if (response.b.type==='EnemyBaseEntity') {
+				//see if it is a enemy base entity
+				var ydif = this.pos.y - response.b.pos.y;
+				//difference between players y position
+				//and bases y
+				var xdif = this.pos.x - response.b.pos.x;
+				//difference between players x position
+				//and bases x
+				
+				if(ydif<-40 && xdif< 70 && xdif>-35) {
+					//if ydif is beyond 30
+					this.body.falling = false;
+					//and falling is false
+					this.body.vel.y = -1;
+				}
+
+				if (xdif>-35 && this.facing==='right' && (xdif<0)){
+					//go beyond 35 stop moving
+					//making sure if youre on the right side even if 
+					//they're coliding they wont both trigger
+
+					this.body.vel.x = 0;
+					this.pos.x = this.pos.x -1; 
+				
+				}else if(xdif<70 && this.facing==='left' && (xdif>0)){
+					this.body.vel.x = 0;
+					//when your not moving
+					this.pos.x = this.pos.x +1;
+				}
+			}
 		}
 });
 
