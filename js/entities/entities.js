@@ -18,7 +18,7 @@
 				getShape: function(){
 					return(new me.Rect(0, 0, 64, 64)).toPolygon();
 					//rectangle of what character can walk in to
-				}  ////
+				}
 			}]);
 				
 
@@ -47,8 +47,15 @@
 
 				this.flipX(true);
 				//flips animation
+				this.facing = "right"
 			}
-			else{ 
+			else if{me.input.isKeyPressed("left")){
+				this.body.vel.x -=this.body.accel.x = me.timer.tick;
+				//making player accelerate to the left
+				this.flipX(false);
+				//dont want player to look like hes walking right
+				//when walking left
+			}else{
 
 				this.body.vel.x = 0;
 				//checking if velocity is 0
@@ -57,6 +64,7 @@
 			
 //
 		if(me.input.isKeyPressed("attack")){
+			//if attack key "a" is pressed...
 				
 				if(!this.renderable.isCurrentAnimation("attack")){
 					//Sets the current animation to attack and once that is over
@@ -110,7 +118,7 @@
 					spriteheight: "100",
 					//sprite height 100
 					getShape: function(){
-						return (new me.Rect(0, 0, 100, 100)).toPolygon();
+						return (new me.Rect(0, 0, 100, 70)).toPolygon();
 					}
 				}]);
 				this.broken = false;
@@ -166,7 +174,7 @@
 					spritewidth: "100",
 					spriteheight: "100",
 					getShape: function(){
-						return (new me.Rect(0, 0, 100, 100)).toPolygon();
+						return (new me.Rect(0, 0, 100, 70)).toPolygon();
 					}
 				}]);
 				this.broken = false;
