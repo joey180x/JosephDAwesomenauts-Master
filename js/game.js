@@ -47,6 +47,7 @@ var game = {
 			//if i want to make another version of him i can do that with this
 			me.pool.register("PlayerBase", game.PlayerBaseEntity);
 			me.pool.register("EnemyBase", game.EnemyBaseEntity);
+			me.pool.register("EnemyCreep", game.EnemyCreep, true);
 
 
 		me.state.set(me.state.MENU, new game.TitleScreen());
