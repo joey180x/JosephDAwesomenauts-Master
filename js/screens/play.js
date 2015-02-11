@@ -17,6 +17,9 @@ game.PlayScreen = me.ScreenObject.extend({
 		//addChild is adding player to world
 		//higher the number the closer player is to the screen
 
+		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
+		me.game.world.addChild(gamemanager, 0);
+
 		me.input.bindKey(me.input.KEY.RIGHT, "right");
 		//binds the right key for movement
 		//click right key to walk right
