@@ -21,6 +21,7 @@
 				}
 			}]);
 			this.type = "PlayerEntity";
+			this.health = 20;
 			this.body.setVelocity(5, 20);
 			//movement speed
 			//changing the x and y location
@@ -113,6 +114,7 @@
 
 		loseHealth: function(damage){
 			this.health = this.health - damage;
+			console.log("this.health");
 		},
 
 		collideHandler: function(response) {
@@ -354,18 +356,23 @@ game.EnemyCreep = me.Entity.extend({
 
 			}
 		}else if (response.b.type==='PlayerEntity'){
+			var xdif = this.pos.x - response.b.pos.x;
+
 			this.attacking=true;
 			//attacking is true
-			this.lastAttacking=this.now;
+			//this.lastAttacking=this.now;
 			//timer of when last attack
-			this.body.vel.x = 0;
+			
+			if(xdif>0){
+				this.pos.x = this.pos.x + 1;
+				//evertime I hit the base i want to stop 
+			//movement by sliding a little to the right
+				this.body.vel.x = 0;
 			//making velocity 0
 			//keeps movning the creep to the right to maintain its position
-			this.pos.x = this.pos.x + 1;
-			//evertime I hit the base i want to stop 
-			//movement by sliding a little to the right
+			}
 
-			if((this.now-this.lastHit >= 1000)){
+			if((this.now-this.lastHit >= 1000) && xdif>0){
 				//checks that is has ben at least 1 second since the creep hit something
 				//if its been more than a second since attack i will
 				//attack again
