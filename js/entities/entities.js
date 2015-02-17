@@ -159,6 +159,32 @@
 					response.b.loseHealth();
 					//responce is for b to lose health
 				}
+			}else if(response.b.type==='EnemyCreep'){
+				var xdif = this.pos.x - response.b.pos.x;
+				var ydif = this.pos.y - response.b.pos.y;
+
+				if (xdif>0) {
+					this.pos.x = this.pos.x + 1;
+					if (this.facing==="left"){
+						this.body.vel.x = 0;
+					}
+				}else{
+					this.pos.x = this.pos.x - 1;
+					if (this.facing==="right"){
+						this.body.vel.x = 0;
+					}
+				}
+
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000
+						&& (Math.abs(ydif) <=40) && 
+						((xdif>0 && this.facing==="left") || ((xdif<0) && this.facing==="right"))
+						//if player is to the right of the creep and Im facing to the left
+						//then i am allowed to attack it otherwize it wont work
+						){
+					this.lastHit = this.now;
+					response.b.loseHealth(1);
+				//only loses health if attacking
+				}
 			}
 		}
 });
@@ -309,7 +335,17 @@ game.EnemyCreep = me.Entity.extend({
 		this.renderable.setCurrentAnimation("walk");
 		},
 
+	loseHealth: function(damage){
+
+		this.health = this.health - damage;
+	},
+
 	update: function(delta){
+		console.log(this.health);
+		if(this.health <= 0){
+			me.game.world.removeChild(this);
+		}
+
 		this.now = new Date().getTime();
 		//refresh every single time
 
