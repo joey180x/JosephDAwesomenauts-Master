@@ -21,13 +21,15 @@
 				}
 			}]);
 			this.type = "PlayerEntity";
+			this.health = game.data.playerHealth;
 			this.health = 20;
-			this.body.setVelocity(5, 20);
+			this.body.setVelocity(game.data.playerMoveSpeed, 20);
 			//movement speed
 			//changing the x and y location
 			this.facing = "right";
 			this.now = new Date().getTime();
 			this.lastHit = this.now;
+			this.dead = false;
 			this.lastAttack = new Date().getTime(); //Haven't used this
 			me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 			//follows the player on the x axis on the screen
@@ -44,6 +46,11 @@
 
 		update: function(delta) {
 			this.now = new Date().getTime();
+
+			if (this.health <= 0){
+				this.dead = true;
+			}
+
 			if(me.input.isKeyPressed("right")){
 				//sets the position of my x by adding the velocity defined above in
 				// setVelocity() and multiplying it by me.timer.tick.
@@ -141,22 +148,22 @@
 					//they're coliding they wont both trigger
 
 					this.body.vel.x = 0;
-					this.pos.x = this.pos.x -1; 
+					//this.pos.x = this.pos.x -1; 
 				
 				}else if(xdif<70 && this.facing==='left' && (xdif>0)){
 					this.body.vel.x = 0;
 					//when your not moving
-					this.pos.x = this.pos.x +1;
+					//this.pos.x = this.pos.x +1;
 				}
 
 
-				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000){
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer){
 					console.log("tower Hit");
 					//if attacking
 					//checking if it has been 400 ms since base was hit
 					//going to update last hit variable so that this will work repeatedly
 					this.lastHit = this.now;
-					response.b.loseHealth();
+					response.b.loseHealth(game.data.playerAttack);
 					//responce is for b to lose health
 				}
 			}else if(response.b.type==='EnemyCreep'){
@@ -175,14 +182,14 @@
 					}
 				}
 
-				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer
 						&& (Math.abs(ydif) <=40) && 
 						((xdif>0 && this.facing==="left") || ((xdif<0) && this.facing==="right"))
 						//if player is to the right of the creep and Im facing to the left
 						//then i am allowed to attack it otherwize it wont work
 						){
 					this.lastHit = this.now;
-					response.b.loseHealth(1);
+					response.b.loseHealth(game.data.playerAttack);
 				//only loses health if attacking
 				}
 			}
@@ -207,7 +214,7 @@
 				}]);
 				this.broken = false;
 				//variable saying tower is not destroyed
-				this.health = 10;
+				this.health = game.data.enemyBaseHealth;
 				//10 health
 				this.alwaysUpdate = true;
 				//even if tower is not showing on screen it still
@@ -386,7 +393,7 @@ game.EnemyCreep = me.Entity.extend({
 				this.lastHit = this.now;
 				//updates he last hit timer
 				//reset it to now is current timer
-				response.b.loseHealth(1);
+				response.b.loseHealth(game.data.enemyCreepAttack );
 				//makes the player base call its losehealth function
 				//and passes it a damage of 1
 
@@ -415,7 +422,7 @@ game.EnemyCreep = me.Entity.extend({
 				this.lastHit = this.now;
 				//updates he last hit timer
 				//reset it to now is current timer
-				response.b.loseHealth(1);
+				response.b.loseHealth(game.data.enemyCreepAttack);
 				//makes the player call its losehealth function
 				//and passes it a damage of 1
 
@@ -433,6 +440,11 @@ game.GameManager = Object.extend({
 
 	update: function(){
 		this.now = new Date().getTime();
+
+		if(game.data.player.dead){
+			me.game.world.removeChild(game.data.player);
+			me.state.current().resetPlayer(10, 0);
+		}
 
 		if (Math.round(this.now/1000)%10 ===0 && (this.now - this.lastCreep >=1000)){
 			this.lastCreep = this.now;

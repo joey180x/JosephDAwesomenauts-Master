@@ -9,13 +9,9 @@ game.PlayScreen = me.ScreenObject.extend({
 		me.levelDirector.loadLevel("Level01");
 		//loading "level01" one game is loaded
 
-		var player = me.pool.pull("player", 0, 420, {});
-		//pulling instince of the player
-		//pulling player out of the pool
+		this.resetPlayer(0, 420);
 
-		me.game.world.addChild(player, 5);
-		//addChild is adding player to world
-		//higher the number the closer player is to the screen
+		
 
 		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
 		me.game.world.addChild(gamemanager, 0);
@@ -44,5 +40,16 @@ game.PlayScreen = me.ScreenObject.extend({
 	onDestroyEvent: function() {
 		// remove the HUD from the game world
 		me.game.world.removeChild(this.HUD);
+	},
+
+	resetPlayer: function(x, y){
+		//where we put player after reset
+		game.data.player = me.pool.pull("player", x, y, {});
+		//pulling instince of the player
+		//pulling player out of the pool
+
+		me.game.world.addChild(game.data.player, 5);
+		//addChild is adding player to world
+		//higher the number the closer player is to the screen
 	}
 });
