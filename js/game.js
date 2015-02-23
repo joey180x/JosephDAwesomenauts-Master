@@ -21,7 +21,15 @@ var game = {
 		playerMoveSpeed: 5,
 		creepMoveSpeed: 5,
 		GameManager: "",
-		player: ""
+		player: "",
+		exp: 0,
+		gold: 0,
+		exp1: 0,
+		exp2: 0,
+		exp3: 0,
+		exp4: 0
+		//for player to spend experience
+
 	},
 	
 	
@@ -71,7 +79,7 @@ var game = {
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 
 		// Start the game.
-		me.state.change(me.state.PLAY);
+		me.state.change(me.state.MENU);
 	}
 };
 

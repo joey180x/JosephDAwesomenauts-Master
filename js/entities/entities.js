@@ -30,6 +30,7 @@
 			this.now = new Date().getTime();
 			this.lastHit = this.now;
 			this.dead = false;
+			this.attack = game.data.playerAttack;
 			this.lastAttack = new Date().getTime(); //Haven't used this
 			me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 			//follows the player on the x axis on the screen
@@ -189,6 +190,8 @@
 						//then i am allowed to attack it otherwize it wont work
 						){
 					this.lastHit = this.now;
+					if(response.b.health <= this.attack)
+
 					response.b.loseHealth(game.data.playerAttack);
 				//only loses health if attacking
 				}
