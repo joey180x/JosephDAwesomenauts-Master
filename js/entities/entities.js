@@ -13,6 +13,7 @@
 
 			this.addAnimation();
 
+
 			
 		
 			this.renderable.setCurrentAnimation("idle");
@@ -140,6 +141,27 @@
 			this.body.jumping = true;
 			this.body.vel.y -= this.body.accel.y * me.timer.tick;
 			},
+		
+		setAnimation: function(){
+			if(this.attacking){
+	if(!this.renderable.isCurrentAnimation("attack")){
+		//Sets the current animation to attack and once that is over
+		//goes back to the idle animation
+		this.renderable.set.setCurrentAnimation("attack", "idle");
+		//Makes it so that the next time we start this sequence we begin
+		//from the first animation, not wherever we left off when
+		//we switched to another animation
+		this.renderable.setCurrentAnimationFrame();
+	}
+}
+else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) {
+	if(!this.renderable.isCurrentAnimation("walk")){
+		this.renderable.setCurrentAnimation("walk");
+	}
+}else if(!this.renderable.isCurrentAnimation("attack")){
+	this.renderable.setCurrentAnimation("idle")''
+}
+		}
 
 		loseHealth: function(damage){
 			this.health = this.health - damage;
@@ -223,5 +245,3 @@
 			}
 		}
 });
-
-		
