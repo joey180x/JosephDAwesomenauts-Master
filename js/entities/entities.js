@@ -171,7 +171,15 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 		collideHandler: function(response) {
 			if (response.b.type==='EnemyBaseEntity') {
 				//see if it is a enemy base entity
-				var ydif = this.pos.y - response.b.pos.y;
+				this.collideWithEnemyBase(resonse);
+			}else if(response.b.type==='EnemyCreep'){
+
+				this.collideWithEnemyCreep(response);
+	}
+		},
+
+		collideWithEnemyBase: function(resonse){
+			var ydif = this.pos.y - response.b.pos.y;
 				//difference between players y position
 				//and bases y
 				var xdif = this.pos.x - response.b.pos.x;
@@ -185,34 +193,20 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 					//and falling is false
 					this.body.vel.y = -1;
 				}
-
-				else if (xdif>-35 && this.facing==='right' && (xdif<0)){
-					//go beyond 35 stop moving
-					//making sure if youre on the right side even if 
-					//they're coliding they wont both trigger
-
-					this.body.vel.x = 0;
-					//this.pos.x = this.pos.x -1; 
-				
-				}else if(xdif<70 && this.facing==='left' && (xdif>0)){
-					this.body.vel.x = 0;
-					//when your not moving
-					//this.pos.x = this.pos.x +1;
-				}
-
-
-				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer){
-					//if attacking
-					//checking if it has been 400 ms since base was hit
-					//going to update last hit variable so that this will work repeatedly
-					this.lastHit = this.now;
-					response.b.loseHealth(game.data.playerAttack);
-					//responce is for b to lose health
-				}
-			}else if(response.b.type==='EnemyCreep'){
+			},
+			collideWithEnemyCreep: function(response){
 				var xdif = this.pos.x - response.b.pos.x;
 				var ydif = this.pos.y - response.b.pos.y;
 
+				this.stopMovement(xdif);
+
+				if(this.checkAttack(xdif, ydif)){
+					this.hitCreep(response);
+				};
+				
+			},
+
+			stopMovement: function(xdif){
 				if (xdif>0) {
 					this.pos.x = this.pos.x + 1;
 					if (this.facing==="left"){
@@ -224,7 +218,8 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 						this.body.vel.x = 0;
 					}
 				}
-
+			},
+			checkAttack: function(xdif, ydif){
 				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer
 						&& (Math.abs(ydif) <=40) && 
 						((xdif>0 && this.facing==="left") || ((xdif<0) && this.facing==="right"))
@@ -232,7 +227,13 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 						//then i am allowed to attack it otherwize it wont work
 						){
 					this.lastHit = this.now;
-					if(response.b.health <= game.data.playerAttack){
+					return true;
+					
+				}
+				return false;
+			},
+			hitCreep: function(response){
+				if(response.b.health <= game.data.playerAttack){
 						//if the creeps health is less than our attack execute code in if statement
 						game.data.gold += 1;
 						//adds one gold for a creep kill
@@ -241,7 +242,8 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 
 					response.b.loseHealth(game.data.playerAttack);
 				//only loses health if attacking
-				}
+				
 			}
-		}
 });
+
+
