@@ -2,7 +2,7 @@
 	game.PlayerEntity = me.Entity.extend({
 		init: function(x, y, settings){
 			//constructer function
-			this.setSuper();
+			this.setSuper(x, y);
 			this.setPlayerTimers();
 			this.setAttributes();
 			this.type = "PlayerEntity";
@@ -20,7 +20,7 @@
 			//rendering the idle position 
 		},
 
-		setSuper: function(){
+		setSuper: function(x, y){
 			//
 			this._super(me.Entity, 'init', [x, y, {
 				//all settings
@@ -72,9 +72,9 @@
 		},
 
 		update: function(delta) {
-			this.now = new this.Date().getTime();
+			this.now = new Date().getTime();
 
-			this.dead = checkIfDead();
+			this.dead = this.checkIfDead();
 
 			this.checkKeyPressesAndMove();
 
@@ -147,11 +147,11 @@
 	if(!this.renderable.isCurrentAnimation("attack")){
 		//Sets the current animation to attack and once that is over
 		//goes back to the idle animation
-		this.renderable.set.setCurrentAnimation("attack", "idle");
+		this.renderable.setCurrentAnimation("attack", "idle");
 		//Makes it so that the next time we start this sequence we begin
 		//from the first animation, not wherever we left off when
 		//we switched to another animation
-		this.renderable.setCurrentAnimationFrame();
+		this.renderable.setAnimationFrame();
 	}
 }
 else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) {
@@ -159,33 +159,33 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 		this.renderable.setCurrentAnimation("walk");
 	}
 }else if(!this.renderable.isCurrentAnimation("attack")){
-	this.renderable.setCurrentAnimation("idle")''
+	this.renderable.setCurrentAnimation("idle");
 }
-		}
+		},
 
 		loseHealth: function(damage){
 			this.health = this.health - damage;
-			console.log("this.health");
+			//console.log("this.health");
 		},
 
 		collideHandler: function(response) {
 			if (response.b.type==='EnemyBaseEntity') {
 				//see if it is a enemy base entity
-				this.collideWithEnemyBase(resonse);
+				this.collideWithEnemyBase(response);
 			}else if(response.b.type==='EnemyCreep'){
 
 				this.collideWithEnemyCreep(response);
 	}
 		},
 
-		collideWithEnemyBase: function(resonse){
+		collideWithEnemyBase: function(response){
 			var ydif = this.pos.y - response.b.pos.y;
 				//difference between players y position
 				//and bases y
 				var xdif = this.pos.x - response.b.pos.x;
 				//difference between players x position
 				//and bases x
-				console.log(ydif);
+				//console.log(ydif);
 				
 				if(ydif<-50 && xdif< 70 && xdif>-35) {
 					//if ydif is beyond 30
