@@ -37,6 +37,7 @@
 					//if my health is greater then or equal to 0
 					this.broken = true;
 					//they we are dead
+					game.data.win = false;
 					this.renderable.setCurrentAnimation("broken");
 				}
 				this.body.update(delta);

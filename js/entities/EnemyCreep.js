@@ -44,8 +44,6 @@ game.EnemyCreep = me.Entity.extend({
 		this.now = new Date().getTime();
 		//refresh every single time
 
-
-
 		this.body.vel.x -= this.body.accel.x * me.timer.tick;
 
 		me.collision.check(this, true, this.collideHandler.bind(this), true);

@@ -101,7 +101,7 @@
 			if(me.input.isKeyPressed("right")){
 				this.moveRight();
 			}else if(me.input.isKeyPressed("left")){
-				
+				this.moveLeft();
 			}else{
 				this.body.vel.x = 0;
 				//checking if velocity is 0
@@ -180,20 +180,26 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 
 		collideWithEnemyBase: function(response){
 			var ydif = this.pos.y - response.b.pos.y;
-				//difference between players y position
-				//and bases y
-				var xdif = this.pos.x - response.b.pos.x;
-				//difference between players x position
-				//and bases x
-				//console.log(ydif);
-				
-				if(ydif<-50 && xdif< 70 && xdif>-35) {
-					//if ydif is beyond 30
-					this.body.falling = false;
-					//and falling is false
-					this.body.vel.y = -1;
-				}
-			},
+			var xdif = this.pos.x - response.b.pos.x;
+
+			if(ydif<-40 && xdif< 70 && xdif>-35){
+				this.body.falling = false;
+				this.body.vel.y = -1;
+			}
+			else if(xdif>-35 && this.facing==='right' && (xdif<0)){
+				this.body.vel.x = 0;
+				this.pos.x = this.pos.x -1;
+			}
+			else if(xdif<70 && this.facing==='left' && xdif>0){
+				this.body.vel.x = 0;
+			}
+
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >=1000){
+				this.lastHit = this.now;
+				response.b.loseHealth();
+			}
+
+		},
 			collideWithEnemyCreep: function(response){
 				var xdif = this.pos.x - response.b.pos.x;
 				var ydif = this.pos.y - response.b.pos.y;
