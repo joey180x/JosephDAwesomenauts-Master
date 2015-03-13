@@ -29,6 +29,7 @@ game.TitleScreen = me.ScreenObject.extend({
 				me.save.remove('exp2');
 				me.save.remove('exp3');
 				me.save.remove('exp4');
+				me.save.add({exp: 0, exp2: 0, exp3: 0, exp4: 0});
 				me.state.change(me.state.PLAY);
 				//changing state to play
 
@@ -59,7 +60,8 @@ game.TitleScreen = me.ScreenObject.extend({
 				game.data.exp1 = me.save.exp3;
 				game.data.exp1 = me.save.exp4;
 				me.input.releasePointerEvent('pointerdown', this);
-				me.state.change(me.state.PLAY);
+				//when pressed with mouse
+				me.state.change(me.state.SPENDEXP);
 				//changing state to play
 
 			}

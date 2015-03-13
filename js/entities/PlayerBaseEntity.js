@@ -15,7 +15,7 @@
 				}]);
 				this.broken = false;
 				//variable saying tower is not destroyed
-				this.health = game.data.enemyBaseHealth;
+				this.health = game.data.PlayerBaseHealth;
 				//10 health
 				this.alwaysUpdate = true;
 				//even if tower is not showing on screen it still

@@ -205,9 +205,11 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 				var ydif = this.pos.y - response.b.pos.y;
 
 				this.stopMovement(xdif);
+				//stop x movement 
 
 				if(this.checkAttack(xdif, ydif)){
 					this.hitCreep(response);
+					//creep responds to hit
 				};
 				
 			},
@@ -234,6 +236,7 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 						){
 					this.lastHit = this.now;
 					return true;
+					//return true
 					
 				}
 				return false;
@@ -243,7 +246,7 @@ else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) 
 						//if the creeps health is less than our attack execute code in if statement
 						game.data.gold += 1;
 						//adds one gold for a creep kill
-						console.log("Current gold: " + game.data.gold);
+						//console.log("Current gold: " + game.data.gold);
 					}
 
 					response.b.loseHealth(game.data.playerAttack);

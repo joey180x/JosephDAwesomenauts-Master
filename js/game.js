@@ -6,7 +6,7 @@ var game = {
 	data : {
 		// score
 		score : 0,
-		enemyBaseHealth: 1,
+		EnemyBaseHealth: 1,
 		PlayerBaseHealth: 1,
 		enemyCreepHealth: 10,
 		playerHealth: 10,
@@ -29,7 +29,9 @@ var game = {
 		exp2: 0,
 		exp3: 0,
 		exp4: 0,
-		win: ""
+		win: "",
+		pausePos: "",
+		buyscreen: ""
 		//for player to spend experience
 
 	},
@@ -53,6 +55,8 @@ var game = {
 	}
 
 	me.save.add({exp: 0, exp2: 0, exp3: 0, exp4: 0});
+
+	me.state.SPENDEXP = 112;
 	
 
 	// Initialize the audio.
@@ -80,10 +84,13 @@ var game = {
 			me.pool.register("GameTimerManager", game.GameTimerManager);
 			me.pool.register("HeroDeathManager", game.HeroDeathManager);
 			me.pool.register("ExperienceManager", game.ExperienceManager);
+			me.pool.register("SpendGold", game.SpendGold);
+
 
 
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
+		me.state.set(me.state.SPENDEXP, new game.SpendExp());
 
 		// Start the game.
 		me.state.change(me.state.MENU);

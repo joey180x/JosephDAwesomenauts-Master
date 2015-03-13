@@ -59,9 +59,9 @@ game.EnemyCreep = me.Entity.extend({
 	},
 
 	collideHandler: function(response) {
-		if(response.b.type==='PlayerBase'){
+		if(response.b.type ==='PlayerBase'){
 		//whatever creep isrunning in to
-			this.attacking=true;
+			this.attacking = true;
 			//attacking is true
 			this.lastAttacking=this.now;
 			//timer of when last attack
@@ -79,12 +79,12 @@ game.EnemyCreep = me.Entity.extend({
 				this.lastHit = this.now;
 				//updates he last hit timer
 				//reset it to now is current timer
-				response.b.loseHealth(game.data.enemyCreepAttack );
+				response.b.loseHealth(game.data.enemyCreepAttack);
 				//makes the player base call its losehealth function
 				//and passes it a damage of 1
 
 			}
-		}else if (response.b.type==='PlayerEntity'){
+		}else if (response.b.type === 'PlayerEntity'){
 			var xdif = this.pos.x - response.b.pos.x;
 
 			this.attacking=true;
