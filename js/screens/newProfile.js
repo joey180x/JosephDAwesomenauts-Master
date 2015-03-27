@@ -5,8 +5,9 @@ game.NewProfile = me.ScreenObject.extend({
 	onResetEvent: function() {	
 		me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage('new-screen')), -10); // TODO
 		//adding exp screen for upgrades
-		document.getElementById("input").style.visability = "visable";
-		document.getElementById("load").style.visability = "visable";
+		document.getElementById("input").style.visibility = "visible";
+		document.getElementById("load").style.visibility = "visible";
+	
 
 
 
@@ -39,8 +40,8 @@ game.NewProfile = me.ScreenObject.extend({
 	 *  action to perform when leaving this screen (state change)
 	 */
 	onDestroyEvent: function() {
-		document.getElementById("input").style.visability = "hidden";
-		document.getElementById("register").style.visability = "hidden";
+		document.getElementById("input").style.visibility = "hidden";
+		document.getElementById("register").style.visibility = "hidden";
 		
 	}
 });
