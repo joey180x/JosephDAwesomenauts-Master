@@ -64,8 +64,9 @@ var game = {
 
 	me.save.add({exp: 0, exp2: 0, exp3: 0, exp4: 0});
 
-	me.state.SPENDEXP = 112;
-	
+	me.state.SPENDEXP = 112
+	me.state.LOAD= 113;
+	me.state.NEW= 114;	
 
 	// Initialize the audio.
 	me.audio.init("mp3,ogg");
@@ -86,19 +87,21 @@ var game = {
 			//addin gplayer to the pool of objects I can use
 			//true makes any object i make true i can have multiple instinces of
 			//if i want to make another version of him i can do that with this
-			me.pool.register("PlayerBase", game.PlayerBaseEntity);
-			me.pool.register("EnemyBase", game.EnemyBaseEntity);
-			me.pool.register("EnemyCreep", game.EnemyCreep, true);
-			me.pool.register("GameTimerManager", game.GameTimerManager);
-			me.pool.register("HeroDeathManager", game.HeroDeathManager);
-			me.pool.register("ExperienceManager", game.ExperienceManager);
-			me.pool.register("SpendGold", game.SpendGold);
+		me.pool.register("PlayerBase", game.PlayerBaseEntity);
+		me.pool.register("EnemyBase", game.EnemyBaseEntity);
+		me.pool.register("EnemyCreep", game.EnemyCreep, true);
+		me.pool.register("GameTimerManager", game.GameTimerManager);
+		me.pool.register("HeroDeathManager", game.HeroDeathManager);
+		me.pool.register("ExperienceManager", game.ExperienceManager);
+		me.pool.register("SpendGold", game.SpendGold);
 
 
 
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 		me.state.set(me.state.SPENDEXP, new game.SpendExp());
+		me.state.set(me.state.LOAD, new game.LoadProfile());
+		me.state.set(me.state.NEW, new game.NewProfile());
 
 		// Start the game.
 		me.state.change(me.state.MENU);
