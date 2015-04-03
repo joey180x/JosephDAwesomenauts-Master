@@ -58,7 +58,7 @@ class Database {
 
 		if(!$exists) {
 			//command to database
-			$query = $connection->query("CREATE DATABASE $database");
+			$query = $this->connection->query("CREATE DATABASE $database");
 
 
 			if($query) {

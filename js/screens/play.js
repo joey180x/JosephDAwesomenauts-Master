@@ -10,6 +10,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		//loading "level01" one game is loaded
 
 		this.resetPlayer(0, 420);
+		//resetting player to set coordinates
 
 		
 

@@ -1,5 +1,5 @@
 <?php
-	require_once(__DIR__ . "/database.php");
+	require_once(__DIR__ . "/../model/database.php");
 	session_start();
 	session_regenerate_id(true);
 	//everytime the file is called upon its 
