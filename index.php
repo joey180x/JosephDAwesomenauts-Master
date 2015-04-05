@@ -28,7 +28,7 @@
 			<!--field class-->
 			<label for="username">Username</label>
 			<!--label for username-->
-			<input type='text' name='username' id='username' autocomplete'off'>
+			<input type='text' name='username' id='username' autocomplete'off'>  
 			<!--type username and password and turn off auto complete-->
 
 			</div>
@@ -104,7 +104,7 @@
 					(function () {
 						window.scrollTo(0, 1);
 						me.video.onresize(null);
-					}).defer();
+					}).defer(); 
 
 					me.event.subscribe(me.event.WINDOW_ONRESIZE, function (e) {
 						window.scrollTo(0, 1);
@@ -112,5 +112,11 @@
 				}
 			});
 		</script>
+
+		<script>
+		$("mainmenu").bind("click", function(){
+			me.state.change(me.state.menu);
+		});
+		</script>////
 	</body>
 </html>
