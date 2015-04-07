@@ -1,12 +1,12 @@
 <?php
 	require_once(__DIR__ . "/../model/config.php");
-	//connecting to config
 
+	//unsets session variable and logs out user
+	//basically deletes variable
 	unset($_SESSION["authenticated"]);
-	//unsetting session variable so we can log out user
 
+	//completely ends session
 	session_destroy();
-	//destroying session and creating a new one not logged in
 
+	//redirects user back to index.php
 	header("Location: " . $path . "index.php");
-	//exact location i want this file to send me to

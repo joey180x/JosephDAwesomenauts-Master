@@ -1,5 +1,8 @@
+//adding new EnemyCreep class
 game.EnemyCreep = me.Entity.extend({
+	//init function w/ parameters x, y, and settings
 	init: function(x, y, settings){
+		//call to super and pass in settings
 		this._super(me.Entity, 'init', [x, y, {
 			image: "creep1",
 			width: 32,
@@ -10,109 +13,106 @@ game.EnemyCreep = me.Entity.extend({
 				return (new me.Rect(0, 0, 32, 64)).toPolygon();
 			}
 		}]);
-		this.health = 10;
+		//gives health of 10
+		this.health = game.data.enemyCreepHealth;
+		//always updates
 		this.alwaysUpdate = true;
-		//this attacking lets us know if the ememy is currently attacking
-		this.attacking = false;
 		//this.attacking lets us know if the enemy is currently attacking
-
+		this.attacking = false;
+		//keeps track of when our creep last attacked anything
 		this.lastAttacking = new Date().getTime();
-		//keeps track when our creep last attacked
+		//keeps track of the last time our creep hit anything
 		this.lastHit = new Date().getTime();
-		//keeps track of last time the creep hit anything
+		//timer for enemy attack
 		this.now = new Date().getTime();
-		//timer for attacking player base
+		//sets movement speed
 		this.body.setVelocity(3, 20);
-
+		//sets type of player
 		this.type = "EnemyCreep";
-
+		//adds walking animation
 		this.renderable.addAnimation("walk", [3, 4, 5], 80);
+		//sets walk animation
 		this.renderable.setCurrentAnimation("walk");
-		},
+	},
 
 	loseHealth: function(damage){
-
+		//subtracts damage from health
 		this.health = this.health - damage;
 	},
 
 	update: function(delta){
-		//console.log(this.health);
+		//if health is less than or equal to 0...
 		if(this.health <= 0){
+			//removes creep from game(basically dies)
 			me.game.world.removeChild(this);
 		}
-
+		
 		this.now = new Date().getTime();
-		//refresh every single time
 
+		var xdif = this.pos.x;
+		//creep jumps if x velocity = 0
+		//I need to have creep jump if velocity = 0 and hits the certain block
+		if(xdif===631 && this.body.vel.x == 0 && !this.body.jumping && !this.body.falling ){
+			this.body.jumping = true;
+			//moves player upwards
+			this.body.vel.y -= this.body.accel.y * me.timer.tick;
+		}
+		//actually moves the creep (left)
 		this.body.vel.x -= this.body.accel.x * me.timer.tick;
 
+		//checks for collisions 
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
-		//checking for collisions
-
+		//updates time
 		this.body.update(delta);
 
-			this._super(me.Entity, "update", [delta]);
-			//updating the super function "delta"
-
+		//updates animation on the fly
+		this._super(me.Entity, "update", [delta]);
 
 		return true;
 	},
 
-	collideHandler: function(response) {
-		if(response.b.type ==='PlayerBase'){
-		//whatever creep isrunning in to
-			this.attacking = true;
-			//attacking is true
-			this.lastAttacking=this.now;
-			//timer of when last attack
-			this.body.vel.x = 0;
-			//making velocity 0
-			//keeps movning the creep to the right to maintain its position
-			this.pos.x = this.pos.x + 1;
-			//evertime I hit the base i want to stop 
-			//movement by sliding a little to the right
-
-			if((this.now-this.lastHit >= 1000)){
-				//checks that is has ben at least 1 second since the creep hit a base
-				//if its been more than a second since attack i will
-				//attack again
-				this.lastHit = this.now;
-				//updates he last hit timer
-				//reset it to now is current timer
-				response.b.loseHealth(game.data.enemyCreepAttack);
-				//makes the player base call its losehealth function
-				//and passes it a damage of 1
-
-			}
-		}else if (response.b.type === 'PlayerEntity'){
-			var xdif = this.pos.x - response.b.pos.x;
-
+	//new collideHandler function
+	collideHandler: function(response){
+		//if creep is touching base...
+		if(response.b.type==='PlayerBase'){
+			//...it is attacking base
 			this.attacking=true;
-			//attacking is true
 			//this.lastAttacking=this.now;
-			//timer of when last attack
-			
-			if(xdif>0){
-				this.pos.x = this.pos.x + 1;
-				//evertime I hit the base i want to stop 
-			//movement by sliding a little to the right
-				this.body.vel.x = 0;
-			//making velocity 0
-			//keeps movning the creep to the right to maintain its position
-			}
-
-			if((this.now-this.lastHit >= 1000) && xdif>0){
-				//checks that is has ben at least 1 second since the creep hit something
-				//if its been more than a second since attack i will
-				//attack again
+			this.body.vel.x = 0;
+			//keeps moving the creep to the right to maintain its position
+			this.pos.x = this.pos.x +1;
+			//checks that it has been at least 1 second since this creep hit a base
+			if((this.now-this.lastHit >= 1000)){
+				//updates the lasthit timer
 				this.lastHit = this.now;
-				//updates he last hit timer
-				//reset it to now is current timer
+				//makes the player base call its loseHealth function and passes it a
+				//game.data.enemyCreepAttack
 				response.b.loseHealth(game.data.enemyCreepAttack);
-				//makes the player call its losehealth function
-				//and passes it a damage of 1
-
 			}
 		}
-	}
+		//if creep touches player...
+		else if(response.b.type==='PlayerEntity'){
+				//sees what x dif is by position of creep - position of player
+				var xdif = this.pos.x - response.b.pos.x;
+				//...it is attacking base
+				this.attacking=true;
+				
+				//position changes only happen if creep is attacking
+				if(xdif>0){
+					//keeps moving the creep to the right to maintain its position
+					this.pos.x = this.pos.x +1;
+					//this.lastAttacking=this.now;
+					this.body.vel.x = 0;
+				}
+				//checks that it has been at least 1 second since this creep hit something
+				//health only lost if creep is attacking
+				if((this.now-this.lastHit >= 1000) && xdif>0){
+					//updates the lasthit timer
+					this.lastHit = this.now;
+					//makes the player call its loseHealth function and passes it a
+					//game.data.enemyCreepAttack
+					response.b.loseHealth(game.data.enemyCreepAttack);
+				}
+			}
+		}
 });

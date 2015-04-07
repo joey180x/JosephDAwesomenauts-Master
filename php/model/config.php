@@ -1,32 +1,26 @@
 <?php
-	require_once(__DIR__ . "/../model/database.php");
-	session_start();
-	session_regenerate_id(true);
-	//everytime the file is called upon its 
-	//going to regenerate the id aand delete the old session
+	require_once(__DIR__ . "/database.php");
 
-	$path = '/JosephDAwesomenauts/php/';
-	//pathway to blog
-	
+	//creates session
+	session_start();
+	//regenerates id of original session
+	//prevents hacking
+	session_regenerate_id(true);
+
+	$path = "/JosephDAwesomenautsnauts/php/";
+
+	//database info
 	$host = "localhost";
 	$username = "root";
 	$password = "root";
 	$database = "awesomenauts_db";
-	//Database variables and information
-	//helping us connect to database
 
-	if (!isset($_SESSION["connection"])) {
-		//isset determines if the variable has a value
-		//if it doesent we have to create a new database variable and
-		//store it in there
-
+	//isset determines if a variable has a value
+	//if statement checks if session variable has not been set, then will set it to the new database object
+	if(!isset($_SESSION{"connection"})){	
+		//new object
 		$connection = new Database($host, $username, $password, $database);
-		//new object stored in connection
-		//having access to having access to function in database.php
-	
-		$_SESSION["connection"] = $connection;
-		//created database object and storing in in our connection
-		//variable to assign is to our session variable called connection
-	}
 
-?>
+		//stores connection in _SESSION variable
+		$_SESSION{"connection"} = $connection;
+	}

@@ -1,47 +1,56 @@
 <?php
 	require_once(__DIR__ . "/../model/config.php");
-	//requiring config file
 
+	//building new array
+	//stores all exp info in one object
 	$array = array(
-			'exp'=> '',
-			'exp1'=> '',
-			'exp2'=> '',
-			'exp3'=> '',
-			'exp4'=> '',
-
-		);
-
+		'exp'=> '',
+		'exp1'=> '',
+		'exp2'=> '',
+		'exp3'=> '',
+		'exp4'=> '',
+	);
+	//new username variable
+	//gets input from post
+	//filtering by sanitizing the string
 	$username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
 	$password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
-	//now have username and password that was send in by the form
 
-	$query = $_SESSION["connection"]->query("SELECT * FROM users WHERE BINARY username = '$username'");
-	//select where our username is equal to the username the user submitted through the form
-	//will retrieve info from database
+	//$_SESSION is where database connection is stored
+	//sql statement that selects all
+	//username is selected by the query
+	//storing salt and password in query variable
+	$query = $_SESSION["connection"]->query("SELECT * FROM users WHERE username = '$username'");
 
-	if ($query->num_rows === 1) {
+	//checks if records were stored in query
+	if($query->num_rows == 1){
+		//fetches array stored in query and stores it in row
 		$row = $query->fetch_array();
-		//triple = checks if it is the same type
-		//getting array of information and storing it in $row
 
-		if ($row["password"] === crypt($password, $row["salt"])) {
-				$_SESSION["authenticated"] = true;
-				$array["exp"] = $row["exp"];
-				$array["exp1"] = $row["exp1"];
-				$array["exp2"] = $row["exp2"];
-				$array["exp3"] = $row["exp3"];
-				$array["exp4"] = $row["exp4"];
-				$_SESSION["name"] = $username;
-
-				echo json_encode($array);
-				//echoing out the whole array as one statement
+		//=== checks if they are the same type
+		//checks if hashed password stored in database is equal to new hashed password stored as salt
+		//crypt function is case sensitive
+		if($row["password"] === crypt($password, $row["salt"])) {
+			//confirms that user has logged in/been authenticated
+			$_SESSION["authenticated"] = true;
+			//setting array exp to user exp
+			$array["exp"] = $row["exp"];
+			$array["exp1"] = $row["exp1"];
+			$array["exp2"] = $row["exp2"];
+			$array["exp3"] = $row["exp3"];
+			$array["exp4"] = $row["exp4"];
+			//stores name of player at all times
+			$_SESSION["name"] = $username;
+			//echoing out whole array as one statement
+			echo json_encode($array);
 		}
-		else {
-			echo "<p>Invalid username and password";
-			//showing message that the username or password is invalid
-		}	
+
+		else{
+			echo "Invalid username and password";
+		}
 	}
-	else {
-		echo "<p>Invalid username and password</p>";
-		//showing message that the password is invalid
+
+	//if query couldnt store a username
+	else{
+		echo "Invalid username and password";
 	}

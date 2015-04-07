@@ -1,42 +1,45 @@
 <?php
+	//gives access to database object within config.php
 	require_once(__DIR__ . "/../model/config.php");
-	//connecting to config
+	//gets 3 inputs from form
+	//storing them in variable
+	//getting info via post method
+	//name of input that is being applied
 	$username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
-	//any invalid characters in strings are deleted
 	$password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
 
-
+	//new salt variable
+	//registers unique salt for users crypted info
+	//tells program to uses shaw256 5000 times
+	//$5$ starts salt function
+	//uses huge random number to create really unique id
 	$salt = "$5$" . "rounds=5000$" . uniqid(mt_rand(), true) . "$";
-	//creating a unique id to use a unique random number 
-	//and make it as unique as possible
-	//5000 rounds to get a unique encript password
-	//starting to encrypt password
-	//php recongnizes the $ sign as a variable
 
-
+	//new hashedPassword variable that stores the crypt version of the original password
 	$hashedPassword = crypt($password, $salt);
-	//returning a value stored in variable
-	//creating encrypted password
 
+	//creating new query
+	//setting info in table
+	//inserts info into table users
 	$query = $_SESSION["connection"]->query("INSERT INTO users SET "
-		. "email = '$email',"
-		. "username = '$username',"
-		. "password = '$hashedPassword',"
+		. "email = '', "
+		. "username = '$username', "
+		. "password = '$hashedPassword', "
 		. "salt = '$salt', "
 		. "exp = 0, "
 		. "exp1 = 0, "
 		. "exp2 = 0, "
 		. "exp3 = 0, "
-		. "exp4 = 0, ");
-	//created a query for users
-	//inserting data inside of users
-	//storing encrypted password inside of the database
+		. "exp4 = 0");
+
+	//stores name of player at all times
 	$_SESSION["name"] = $username;
 
-	if($query) {
+	if($query){
+		//need this for Ajax on index.php
 		echo "true";
-		//Needs this for Ajax on index.php
 	}
-	else {
+
+	else{
 		echo "<p>" . $_SESSION["connection"]->error . "</p>";
 	}
