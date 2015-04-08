@@ -52,7 +52,7 @@ game.resources = [
 	 * {name: "example_bgm", type: "audio", src: "data/bgm/"},
 
 	 */
-	 {name: "dubstep", type: "audio", src: "data/bgm/dubstep.mp3"};
+	 {name: "dubstep", type: "audio", src: "data/bgm/"},
  	
 
 	/* Sound effects. 
