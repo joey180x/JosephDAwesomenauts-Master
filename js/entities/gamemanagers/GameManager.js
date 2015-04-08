@@ -58,132 +58,120 @@ game.ExperienceManager = Object.extend({
 		this.gameOver = true;
 		//game is over
 		me.save.exp =  game.data.exp;
-		//saves experience
-
-
-			//ajax updates database while program is running
+		//saves exp
 			$.ajax({
-				//passes info to save-user file as post
+				//passes info
 				type: "POST",
 				url: "php/controller/save-user.php",
-				//passes info value as a variable
+				//saving user
 				data: {
-					//passes in all exp variables
+					//exp vaiables
 					exp: game.data.exp,
 					exp1: game.data.exp1,
 					exp2: game.data.exp2,
 					exp3: game.data.exp3,
 					exp4: game.data.exp4,
 				},
-				//type of data is text
+				//text data
 				dataType: "text"
 			})
-				//if it does what its supposed to do...
 				.success(function(response){
-					//if what we echoed out is true
+					//success response
 					if(response==="true"){
-						//takes user to menu screen
+						//if response is true
 						me.state.change(me.state.MENU);
 					}
 					else{
-						//echo out something besides true
 						alert(response);
 					}
 			})
-				//if it fails...
 				.fail(function(response){
-					//prints out Fail
-					alert("Fail");
+					alert("YOU HAVE FAILED!");
+					//alert fail
 				});
 	}
 	
 });
 
-//new SpendGold object
 game.SpendGold = Object.extend({
-	//new init function
+	//spending gold
 	init: function(x, y, settings){
-		//sets game to current time
+		//init function
 		this.now = new Date().getTime();
-		//keeps track of last time u bought something
+		//the date and time of right now
 		this.lastBuy = new Date().getTime();
-		//game isnt paused
+		//when the last purchase was made
 		this.paused = false;
-		//awlays updates game
+		//not always paused
 		this.alwaysUpdate = true;
-		//updates when paused
+		//alwasy update
 		this.updateWhenPaused = true;
-		//are not currently buying
+		//update when paused
 		this.buying = false;
+		//not buying
 	},
-
-	//new update function
 	update: function(){
-		//updates timers
+		//update function
 		this.now = new Date().getTime();
-		//if buy button is pressed...
-		//and its been one second since last buy...
+		//what is the date and time
 		if(me.input.isKeyPressed("buy") && this.now-this.lastBuy >=1000){
-			//last buy was now
+			//wait for the last buy
 			this.lastBuy = this.now;
-			//if you are not currently buying...
+			//last buy
 			if(!this.buying){
-				//calls startBuying function
+				//if not buying
 				this.startBuying();
+				//start buying class
 			}
 			else{
-				//calls stopBuying
 				this.stopBuying();
+				//calls stop buying
 			}
 		}
 
-		//calls checkBuyKeys function
 		this.checkBuyKeys();
+		//checking buy keys
 
 		return true;
+		//return ture
 	},
-
-	//new startBuying function
 	startBuying: function(){
 		this.buying = true;
-		//when you start buying, game will pause
+		//buying
 		me.state.pause(me.state.PLAY);
-		//sets pausePos to current location
+		//sets state to paused
 		game.data.pausePos = me.game.viewport.localToWorld(0, 0);
-		//makes screen a new sprite
-		//sets x and y position
-		//gets image
+		//view of pause
 		game.data.buyscreen = new me.Sprite(game.data.pausePos.x, game.data.pausePos.y, me.loader.getImage('gold-screen'));
-		//updates when screen is up
+		//gold buy screen
 		game.data.buyscreen.updateWhenPaused = true;
-		//makes buy screen opague
+		//when on buy screen update true
 		game.data.buyscreen.setOpacity(0.8);
-		//adds screen to the game
+		//sets opacity of buy screen
 		me.game.world.addChild(game.data.buyscreen, 34)
-		//makes sure player doesnt move when game is paused
+		//add child to buy screen
 		game.data.player.body.setVelocity(0, 0);
+		//set velocity
 		me.state.pause(me.state.PLAY);
-		//setting up keys
-		//binding f1-f6 keys
+		//pause to play
 		me.input.bindKey(me.input.KEY.F1, "F1", true);
 		me.input.bindKey(me.input.KEY.F2, "F2", true);
 		me.input.bindKey(me.input.KEY.F3, "F3", true);
 		me.input.bindKey(me.input.KEY.F4, "F4", true);
 		me.input.bindKey(me.input.KEY.F5, "F5", true);
 		me.input.bindKey(me.input.KEY.F6, "F6", true);
-		//calls setBuyText function
+		//setting up keys
 		this.setBuyText();
+		//set buy text
 	},
-
-	//new setBuyText function
 	setBuyText: function(){
-		//making something stored in buytext
+		//sets buying text
 		game.data.buytext = new (me.Renderable.extend({
-			//new init function
+			//new renderable buy text
 			init: function(){
 				//call to super class
 				//passes in info
-				//sets text location
+				/
 				this._super(me.Renderable, 'init', [game.data.pausePos.x, game.data.pausePos.y, 300, 50]);
 				//font settings
 				this.font = new me.Font("Arial", 26, "white");

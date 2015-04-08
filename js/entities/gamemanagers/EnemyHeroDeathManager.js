@@ -1,11 +1,9 @@
-game.EnemyDeathManager = Object.extend({
-	//new init function
+/*game.EnemyDeathManager = Object.extend({
+	//
 	init: function(x, y, settings){
 		//always updates function
 		this.alwaysUpdate = true;
 	},
-
-	//new update function
 	update: function(){
 		if(game.data.player.dead){
 			//if player dies
