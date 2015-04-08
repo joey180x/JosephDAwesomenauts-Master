@@ -4,7 +4,7 @@ game.MiniPlayerLocation = me.Entity.extend({
 		this.settings = settings;
 		this.r = 5;
 		this.diameter = (this.r+2)*2;
-		this.anchorPoint = new me.Velocity2d(0, 0);
+		this.anchorPoint = new me.Vector2d(0, 0);
 		this.loc = x, y;
 		this.settings.width = this.diameter;
 		this.settings.height = this.diameter;
@@ -34,7 +34,7 @@ game.MiniPlayerLocation = me.Entity.extend({
 		}]);
 	},
 
-	draw: function(){
+	draw: function(renderer){
 		this._super(me.Entity, "draw", [renderer]);
 		this.floating = true;
 		renderer.drawImage(

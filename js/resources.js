@@ -7,6 +7,9 @@ game.resources = [
 
 	 //allows program to actually use background tiles and meta tiles
 	 {name: "background-tiles", type:"image", src: "data/img/background-tiles.png"},
+
+	 {name: "real-grass", type:"image", src: "data/img/grass.png"},
+
 	 {name: "meta-tiles", type:"image", src: "data/img/meta-tiles.png"},
 	 //program loads orc
 	 {name: "player", type:"image", src: "data/img/orcSpear.png"},
@@ -47,7 +50,10 @@ game.resources = [
 	/* Background music. 
 	 * @example
 	 * {name: "example_bgm", type: "audio", src: "data/bgm/"},
-	 */	
+
+	 */
+	 {name: "dubstep", type: "audio", src: "data/bgm/dubstep.mp3"};
+ 	
 
 	/* Sound effects. 
 	 * @example

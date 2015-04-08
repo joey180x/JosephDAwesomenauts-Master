@@ -69,6 +69,8 @@ game.PlayScreen = me.ScreenObject.extend({
 		game.data.gold = 10;
 	},
 
+	me.audio.playTrack("dubstep");
+
 
 	/**
 	 *  action to perform when leaving this screen (state change)

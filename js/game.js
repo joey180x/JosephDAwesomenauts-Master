@@ -114,7 +114,7 @@ var game = {
 		me.pool.register("spear", game.SpearThrow);
 		//registering minmap class 
 		me.pool.register("minimap", game.MiniMap, true);
-		me.pool.register("miniplayer", game.MiniMap, true);
+		me.pool.register("miniplayer", game.MiniPlayerLocation, true);
 
 
 		me.state.set(me.state.MENU, new game.TitleScreen());

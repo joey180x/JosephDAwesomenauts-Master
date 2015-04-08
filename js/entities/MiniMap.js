@@ -8,9 +8,9 @@ game.MiniMap = me.Entity.extend({
 			//width
 			height: 161,
 			//height
-			spritewidth: 721,
+			spritewidth: "721",
 			//spritewidth
-			spriteheight: 161,
+			spriteheight: "161",
 			//spriteheight
 			getShape: function(){
 				return (new me.Rect(0, 0, 699, 114)).toPolygon();

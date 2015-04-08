@@ -52,7 +52,7 @@ game.EnemyCreep = me.Entity.extend({
 		var xdif = this.pos.x;
 		//creep jumps if x velocity = 0
 		//I need to have creep jump if velocity = 0 and hits the certain block
-		if(xdif===631 && this.body.vel.x == 0 && !this.body.jumping && !this.body.falling ){
+		if(this.body.vel.x == 0 && !this.body.jumping && !this.body.falling ){
 			this.body.jumping = true;
 			//moves player upwards
 			this.body.vel.y -= this.body.accel.y * me.timer.tick;
