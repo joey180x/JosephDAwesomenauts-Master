@@ -1,15 +1,16 @@
 game.HeroDeathManager = Object.extend({
-	//new init function
+	//Hero death manager
 	init: function(x, y, settings){
-		//always updates function
 		this.alwaysUpdate = true;
+		//always updating
 	},
 	update: function(){
 		if(game.data.player.dead){
-			//removes character from the map
+			//if player dies
 			me.game.world.removeChild(game.data.player);
-			//respawns player
+			//remove player
 			me.state.current().resetPlayer(10, 0);
+			//removing to set coordinates
 		}
 		return true;
 		//returning true
@@ -18,51 +19,46 @@ game.HeroDeathManager = Object.extend({
 
 game.ExperienceManager = Object.extend({
 	init: function(x, y, settings){
-		//always updates function
 		this.alwaysUpdate = true;
-		//game is not over initially
+		//game always updating
 		this.gameover = false;
+		//game is not over
 	},
 	update: function(){
 		if(game.data.win === true && !this.gameover){
-			//call to gameOver function
-			//passes true
+			//if you win game is over
 			this.gameOver(true);
-			//print out you win
-			alert("YOU WIN!");
+			//the game is over
+			alert("YOU HAVE WON");
+			//alert player he/she has won
 		}
-		//if I lose...
-		//and game isnt over
 		else if(game.data.win === false && !this.gameover){
-			//call to gameOver function
-			//passes false
+			//if game isnt over
 			this.gameOver(false);
-			//prints out you lose
-			alert("YOU LOSE!");
+			//game over is false(not over)
+			alert("YOU HAVE LOST!");
+			//alert player that they are terrible at life
 		}
-
-		//tells update to actually do stuff
 		return true;
+		//returning true
 
 	},
-
-	//new gameOver function
-	//passes win
+	
 	gameOver: function(win){
-		//if player wins
 		if(win){
-			//adds 10 experience
+			//if you win
 			game.data.exp += 10;
+			//add 10 experience
 		}
 		else{
-			//adds 1 experience
 			game.data.exp += 1;
+			//add 1 experience
 		}
 		
-		//game is over if player wins
 		this.gameOver = true;
-		//saves current game variable of experience into save variable
+		//game is over
 		me.save.exp =  game.data.exp;
+		//saves experience
 
 
 			//ajax updates database while program is running
